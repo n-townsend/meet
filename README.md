@@ -6,8 +6,8 @@ Meet App used for finding a list of events based on city selected.
 
 ### Filter Events by City
 
-Given: The user has launched the application.
-When: The user selects a city from the city options in the menu.
+Given: The user has launched the application.<br>
+When: The user selects a city from the city options in the menu.<br>
 Then: Application refreshes to show only events located in the selected city.
 
 ### Show and Hide Event Details
