@@ -1,6 +1,6 @@
 ## Application Details
 
-Meet App used for finding a list of eventsbased on city selected.
+Meet App used for finding a list of events based on city selected.
 
 ## Meet-App Features and User Stories
 
