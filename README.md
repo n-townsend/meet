@@ -39,3 +39,7 @@ Then: User is shown option to add a shortcut to the home screen. Once allowed th
 Given: User is on the Event Details page.<br>
 When: User selects "Charts" button.<br>
 Then: Application displays relevant data in a chart providing additional statistics about the event.
+
+### Serverless
+
+User authentication, event notifications, and recommendations are applied using serverless functions. Utilizing the serverless architecture will allow the application to scale resources during periods of high traffic to ensure a smooth user experience, as well as handle the backend processes and provide a more personalized experience for each user.
