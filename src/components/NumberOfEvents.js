@@ -1,6 +1,7 @@
 const NumberOfEvents = ({ setCurrentNOE, setErrorAlert }) => {
   const handleInputChanged = (event) => {
     const value = event.target.value;
+    setCurrentNOE(value);
 
     if (isNaN(value)) {
       setErrorAlert('value is not a number');
