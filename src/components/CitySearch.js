@@ -5,10 +5,6 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
-  useEffect(() => {
-    setSuggestions(allLocations);
-  }, [`${allLocations}`]);
-
   const handleInputChanged = (event) => {
     const value = event.target.value;
     const filteredLocations = allLocations ? allLocations.filter((location) => {
@@ -25,6 +21,10 @@ const CitySearch = ({ allLocations, setCurrentCity, setInfoAlert }) => {
     }
     setInfoAlert(infoText);
   };
+
+  useEffect(() => {
+    setSuggestions(allLocations);
+  }, [allLocations]);
 
   const handleItemClicked = (event) => {
     const value = event.target.textContent;

@@ -23,6 +23,39 @@ const checkToken = async (accessToken) => {
   return result;
 };
 
+/**
+ *
+ * This function will fetch the list of all events
+ */
+export const getEvents = async () => {
+  NProgress.start();
+
+  if (window.location.href.startsWith("http://localhost")) {
+    NProgress.done();
+    return mockData;
+  }
+  //Access local storage when user offline
+  if (!navigator.onLine) {
+    const data = localStorage.getItem("lastEvents");
+    NProgress.done();
+    console.log("offline data: ", data);
+    return data ? JSON.parse(data).events : [];
+  }
+  const token = await getAccessToken();
+
+  if (token) {
+    removeQuery();
+    const url = "https://t9rvfx8ay2.execute-api.eu-central-1.amazonaws.com/dev/api/get-events" + "/" + token;
+    const response = await fetch(url);
+    const result = await response.json();
+    if (result) {
+      NProgress.done();
+      localStorage.setItem("lastEvents", JSON.stringify(result.events));
+      return result.events;
+    } else return null;
+  }
+};
+
 const removeQuery = () => {
   let newurl;
   if (window.history.pushState && window.location.pathname) {
@@ -35,43 +68,6 @@ const removeQuery = () => {
   } else {
     newurl = window.location.protocol + "//" + window.location.host;
     window.history.pushState("", "", newurl);
-  }
-};
-
-/**
- *
- * This function will fetch the list of all events
- */
-export const getEvents = async () => {
-  NProgress.start();
-
-  if (window.location.href.startsWith("http://localhost")) {
-    NProgress.done();
-    return mockData;
-  }
-
-  //Access local storage when user is offline
-  if (!navigator.onLine) {
-    const data = localStorage.getItem("lastEvents");
-    NProgress.done();
-    // console.log("offline data: ", data);
-    return data ? JSON.parse(data).events : [];
-  }
-
-  const token = await getAccessToken();
-
-  if (token) {
-    removeQuery();
-    const url = "https://t9rvfx8ay2.execute-api.eu-central-1.amazonaws.com/dev/api/get-events" + "/" + token;
-    const response = await fetch(url);
-    const result = await response.json();
-    if (result.data) {
-      var locations = extractLocations(result.data.events);
-      localStorage.setItem("lastEvents", JSON.stringify(result.data));
-      localStorage.setItem("locations", JSON.stringify(locations));
-    }
-    NProgress.done();
-    return result.data.events;
   }
 };
 

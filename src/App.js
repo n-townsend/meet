@@ -14,9 +14,20 @@ const App = () => {
   const [currentCity, setCurrentCity] = useState("See all cities");
   const [infoAlert, setInfoAlert] = useState("");
   const [errorAlert, setErrorAlert] = useState('');
-  const [warningAlert, setWarningAlert] = useState('');
+  const [warningAlert, setWarningAlert] = useState("");
 
   useEffect(() => {
+    const fetchData = async () => {
+      const allEvents = await getEvents();
+      const filteredEvents =
+        currentCity === 'See all cities'
+          ? allEvents
+          : allEvents.filter((event) => event.location === currentCity);
+      setEvents(filteredEvents.slice(0, currentNOE));
+      setAllLocations(extractLocations(allEvents));
+    };
+
+
     if (navigator.onLine) {
       setWarningAlert('');
     } else {
@@ -24,15 +35,6 @@ const App = () => {
     }
     fetchData();
   }, [currentCity, currentNOE]);
-
-  const fetchData = async () => {
-    const allEvents = await getEvents();
-    const filteredEvents = currentCity === "See all cities" ?
-      allEvents :
-      allEvents.filter(event => event.location === currentCity)
-    setEvents(filteredEvents.slice(0, currentNOE));
-    setAllLocations(extractLocations(allEvents));
-  }
 
   return (
     <div className="App">
@@ -48,9 +50,8 @@ const App = () => {
       <NumberOfEvents
         setCurrentNOE={setCurrentNOE}
         setErrorAlert={setErrorAlert} />
-      <EventList events={events} />
+      <EventList events={events} numberOfEvents={currentNOE} />
     </div>
   );
 };
-
 export default App;
