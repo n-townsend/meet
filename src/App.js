@@ -14,12 +14,13 @@ const App = () => {
   const [currentCity, setCurrentCity] = useState("See all cities");
   const [infoAlert, setInfoAlert] = useState("");
   const [errorAlert, setErrorAlert] = useState('');
+  const [warningAlert, setWarningAlert] = useState('');
 
   useEffect(() => {
     if (navigator.onLine) {
-      // set the warning alert message to an empty string ""
+      setWarningAlert('');
     } else {
-      // set the warning alert message to a non-empty string
+      setWarningAlert('You seem to be offline!');
     }
     fetchData();
   }, [currentCity, currentNOE]);
@@ -38,6 +39,7 @@ const App = () => {
       <div className="alerts-container">
         {infoAlert.length ? <InfoAlert text={infoAlert} /> : null}
         {errorAlert.length ? <ErrorAlert text={errorAlert} /> : null}
+        {warningAlert.length ? <WarningAlert text={warningAlert} /> : null}
       </div>
       <CitySearch
         allLocations={allLocations}
