@@ -1,4 +1,5 @@
 import mockData from './mock-data';
+import NProgress from "nprogress";
 
 /**
  *
@@ -37,24 +38,24 @@ const removeQuery = () => {
   }
 };
 
-const getToken = async (code) => {
-  const encodeCode = encodeURIComponent(code);
-  const response = await fetch(
-    'https://t9rvfx8ay2.execute-api.eu-central-1.amazonaws.com/dev/api/token' + '/' + encodeCode
-  );
-  const { access_token } = await response.json();
-  access_token && localStorage.setItem("access_token", access_token);
-
-  return access_token;
-};
-
 /**
  *
  * This function will fetch the list of all events
  */
 export const getEvents = async () => {
-  if (window.location.href.startsWith('http://localhost')) {
+  NProgress.start();
+
+  if (window.location.href.startsWith("http://localhost")) {
+    NProgress.done();
     return mockData;
+  }
+
+  //Access local storage when user is offline
+  if (!navigator.onLine) {
+    const data = localStorage.getItem("lastEvents");
+    NProgress.done();
+    // console.log("offline data: ", data);
+    return data ? JSON.parse(data).events : [];
   }
 
   const token = await getAccessToken();
@@ -64,10 +65,25 @@ export const getEvents = async () => {
     const url = "https://t9rvfx8ay2.execute-api.eu-central-1.amazonaws.com/dev/api/get-events" + "/" + token;
     const response = await fetch(url);
     const result = await response.json();
-    if (result) {
-      return result.events;
-    } else return null;
+    if (result.data) {
+      var locations = extractLocations(result.data.events);
+      localStorage.setItem("lastEvents", JSON.stringify(result.data));
+      localStorage.setItem("locations", JSON.stringify(locations));
+    }
+    NProgress.done();
+    return result.data.events;
   }
+};
+
+const getToken = async (code) => {
+  const encodeCode = encodeURIComponent(code);
+  const response = await fetch(
+    'https://t9rvfx8ay2.execute-api.eu-central-1.amazonaws.com/dev/api/token' + '/' + encodeCode
+  );
+  const { access_token } = await response.json();
+  access_token && localStorage.setItem("access_token", access_token);
+
+  return access_token;
 };
 
 export const getAccessToken = async () => {
