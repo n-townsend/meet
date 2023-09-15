@@ -4,7 +4,7 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Legend, Tooltip } from "recha
 const EventGenresChart = ({ events }) => {
   const [data, setData] = useState([]);
   const genres = ["React", "JavaScript", "Node", "jQuery", "Angular"];
-  const colors = ["#7C9D96", "#9d7c83", "#967c9d", "#c6ba68", "#9d967c"];
+  const colors = ["#685DE3", "#249729", "#A83618", "#9FAF06", "#FDB192"];
 
   // get data on event change
   useEffect(() => {
@@ -67,7 +67,10 @@ const EventGenresChart = ({ events }) => {
           ))}
         </Pie>
         <Legend verticalAlign="bottom" height={36} iconType="plainline" />
-        <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ color: "black", backgroundColor: "#7C9D96", borderRadius: "10px", display: "flex", justifyContent: "center", border: "none", padding: "3px" }} />
+        <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{
+          color: "black", display: "flex", backgroundColor: "white",
+          justifyContent: "center", border: "none", padding: "3px",
+        }} />
       </PieChart>
     </ResponsiveContainer>
   );
